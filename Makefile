@@ -1,40 +1,22 @@
-# ─── Makefile — Puissance 4 3D ───────────────────────────────────────────────
 
-CXX      = g++
-CXXFLAGS = -std=c++17 -O2 -Wall -Wextra
+CC = mpic++
 
-TARGET = puissance4
+exe : exe1 exe2 exe3
 
-SRCS = main.cpp \
-       Game.cpp \
-       Board.cpp \
-       BitBoard.cpp \
-       Cell.cpp \
-       Move.cpp \
-       Player.cpp \
-       HumanPlayer.cpp \
-       AIPlayer.cpp \
-       Strategy.cpp \
-       RandomStrategy.cpp \
-       AlphaBetaStrategy.cpp \
-       Evaluator.cpp
-
-OBJS = $(SRCS:.cpp=.o)
-
-# ─── Règles ───────────────────────────────────────────────────────────────────
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+exe1 :  TestJeu.o position.o arbitre.o joueur.o
+	${CC} -o exe1 *.o
+exe2 :  TestJeu.o position.o arbitre.o joueur.o
+	${CC} -o exe2 *.o
+exe3 :  TestJeu.o position.o arbitre.o joueur.o
+	${CC} -o exe3 *.o
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	${CC} -c $< -o $@ 
 
-run: all
-	./$(TARGET)
+clean :
+	rm -f *.o exe
 
-clean:
-	rm -f $(OBJS) $(TARGET)
+run :
+	mpirun.openmpi -n 3 ./exe1 ./exe2 ./exe3
 
-.PHONY: all run clean
+
